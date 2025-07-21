@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple AI Frontend</title>
+
+  <style>
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 100%;
+      height: 100%;
+    }
+    .ideate-wrapper {
+      width: 500px;
+      border-radius: 16px;
+      border: solid 2px gray;
+
+      padding: 16px;
+    }
+    .ideate-wrapper span {
+      font-weight: bold;
+      font-size: large;
+    }
+    .ideate-item {
+      display: flex;
+      flex-direction: column;
+      margin-top: 16px;
+    }
+    .ideate-item textarea {
+      padding: 8px;
+    }
+    #ai-response {
+      max-height: 300px;
+    }
+    #ai-send-button {
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      
+      font-size: 20px;
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="ideate-wrapper">
+      <span>Ideate</span>
+
+      <div class="ideate-item">
+        <label>User or Customer</label>
+        <textarea id="ideate-user" rows="4" placeholder="Who will use the participant's solution? Explain their needs and challenges."></textarea>
+      </div>
+      <div class="ideate-item">
+        <label>Problem or Opportunity</label>
+        <textarea id="ideate-problem" rows="4" placeholder="What problem is the participant trying to solve? Why does this problem matter and how does it affect people?"></textarea>
+      </div>
+      <div class="ideate-item">
+        <label>Innovation or Unique Value Proposition</label>
+        <textarea id="ideate-innovation" rows="4" placeholder="What makes the participant's idea special or unique? How is it different and valuable?"></textarea>
+      </div>
+      <div class="ideate-item">
+        <label>Solution or Product</label>
+        <textarea id="ideate-solution" rows="4" placeholder="What is the participant's bright idea? How does it solve the problem they identified."></textarea>
+      </div>
+    </div>
+
+    <div class="ideate-wrapper ai-wrapper">
+      <span>AI Assistant</span>
+      <div class="ideate-item">
+        <textarea id="ai-response" disabled rows="16"></textarea>
+      </div>
+      <div class="ideate-item">
+        <textarea id="ai-textbox" placeholder="Hello, what can I help with?" rows="6"></textarea>
+      </div>
+      <div class="ideate-item">
+        <button id="ai-send-button">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const query_payload = {
+      user_query: "",
+      ideate_context: {
+        user_customer: "",
+        problem_opportunity: "",
+        innovation_uvp: "",
+        solution_product: ""
+      }
+    }
+
+    const send_button = document.getElementById('ai-send-button');
+    send_button.addEventListener('click', sendPayload);
+
+    const textarea_ai = document.getElementById('ai-textbox');
+    const textarea_ideate_user = document.getElementById('ideate-user');
+    const textarea_ideate_problem = document.getElementById('ideate-problem');
+    const textarea_ideate_innovation = document.getElementById('ideate-innovation');
+    const textarea_ideate_solution = document.getElementById('ideate-solution');
+    const textarea_ai_response = document.getElementById('ai-response');
+
+    async function sendPayload() {
+      query_payload.user_query = textarea_ai.value;
+      query_payload.ideate_context.user_customer = textarea_ideate_user.value;
+      query_payload.ideate_context.problem_opportunity = textarea_ideate_problem.value;
+      query_payload.ideate_context.innovation_uvp = textarea_ideate_innovation.value;
+      query_payload.ideate_context.solution_product = textarea_ideate_solution.value;
+
+      // temporary debug line
+      console.log("Sending payload:", query_payload);
+
+      // send post request here
+      try {
+        const response = await fetch('http://127.0.0.1:8000/ideate_assistant', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json' // Tell the server we're sending JSON
+          },
+          body: JSON.stringify(query_payload) // Convert the JS object to a JSON string
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Received response:", data);
+        
+        // display response
+        // textarea_ai_response.value = JSON.stringify(query_payload);
+        textarea_ai_response.value = data.response;
+
+      } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+      }
+    }
+
+  </script>
+</body>
+</html>
+
