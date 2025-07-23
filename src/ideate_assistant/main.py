@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware 
 
+from .crew import IdeateCrew
+
 class IdeateContext(BaseModel):
   user_customer: str
   problem_opportunity: str
@@ -38,15 +40,8 @@ def get_ideate_assistance(payload: QueryPayload) -> dict:
   Receives the user's query and Ideate context,
   kicks off the Crew AI process, and returns the result.
   """
-  # Extract the data from the payload
-  inputs = {
-    'user_query': payload.user_query,
-    'ideate_context': payload.ideate_context.model_dump_json() # Pass context as a JSON string
-  }
-
-  # Kick off the crew
-  # ideate_crew = IdeateCrew()
-  # result = ideate_crew.kickoff(inputs=inputs)
+  # crew = IdeateCrew(payload.user_query, payload.ideate_context.model_dump_json())
+  # result = crew.run()
   
   result = f"Crew AI would now process your query: '{payload}'"
   return {"response": result}
