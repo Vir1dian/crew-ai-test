@@ -40,10 +40,10 @@ def get_ideate_assistance(payload: QueryPayload) -> dict:
   Receives the user's query and Ideate context,
   kicks off the Crew AI process, and returns the result.
   """
-  # crew = IdeateCrew(payload.user_query, payload.ideate_context.model_dump_json())
-  # result = crew.run()
+  crew = IdeateCrew(payload.user_query, payload.ideate_context)
+  result = crew.run()
   
-  result = f"Crew AI would now process your query: '{payload}'"
+  # result = f"Crew AI would now process your query: '{payload}'"
   return {"response": result}
 
 @app.get("/")

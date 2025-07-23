@@ -30,7 +30,7 @@ class IdeateTasks:
     return Task(
       description=dedent(f'''
         **Task**: Analyze the Solution & Competitive Landscape.
-        **Description**: As a Competitive Intelligence Analyst, your job is to analyze the "Solution or Product" and "Innovation" sections of the submission. 
+        **Description**: As a Competitive Intelligence Analyst, your job is to analyze the "Solution or Product" and "Innovation or Unique Value Proposition" sections of the submission. 
         You must use the prior "Problem-User Fit" analysis as a starting point. Your goal is to determine if the solution is a viable competitor in the current market.
 
         **Parameters**:

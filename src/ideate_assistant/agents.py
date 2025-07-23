@@ -23,7 +23,7 @@ class IdeateAgents():
         search_tool,
         scrape_tool,
       ],
-      verbose=True,  # will this verbose part show up on my response element in my front end as well?
+      verbose=True, 
       llm=self.llm,
     )
   
