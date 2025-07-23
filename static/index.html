@@ -117,6 +117,10 @@
       // temporary debug line
       console.log("Sending payload:", query_payload);
 
+      send_button.disabled = true;
+      send_button.textContent = 'Thinking...';
+      textarea_ai_response.value = '';
+
       // send post request here
       try {
         const response = await fetch('http://127.0.0.1:8000/ideate_assistant', {
@@ -136,10 +140,13 @@
         
         // display response
         // textarea_ai_response.value = JSON.stringify(query_payload);
-        textarea_ai_response.value = data.response;
+        textarea_ai_response.value = data.response.raw;
 
       } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
+      } finally {
+        send_button.disabled = false;
+        send_button.textContent = 'Send';
       }
     }
 
