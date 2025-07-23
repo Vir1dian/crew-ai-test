@@ -1,6 +1,6 @@
 from crewai import Agent
 from langchain_openai import ChatOpenAI
-# tools imports for later
+from .tools.search_tools import search_tool, scrape_tool
 
 from textwrap import dedent
 
@@ -19,9 +19,10 @@ class IdeateAgents():
         As a former lead researcher for a top-tier venture capital firm, I've spent my career dissecting thousands of startup pitches. 
         My expertise lies in cutting through the noise to identify genuine, high-value user problems and verifying target customer bases.        
       """),
-      # tools=[
-      #   
-      # ],
+      tools=[
+        search_tool,
+        scrape_tool,
+      ],
       verbose=True,  # will this verbose part show up on my response element in my front end as well?
       llm=self.llm,
     )
@@ -38,9 +39,10 @@ class IdeateAgents():
         I excel at reverse-engineering products and mapping market dynamics.
         I have a knack for quickly identifying established players and uncovering the subtle nuances that define a truly unique and defensible product.
       """),
-      # tools=[
-      #   
-      # ],
+      tools=[
+        search_tool,
+        scrape_tool,
+      ],
       verbose=True,
       llm=self.llm,
     )
@@ -60,7 +62,6 @@ class IdeateAgents():
       # tools=[
       #   
       # ],
-      allow_delegation=True,
       verbose=True,
       llm=self.llm,
     )
