@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles 
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware 
 
 class IdeateContext(BaseModel):
   user_customer: str
@@ -15,6 +18,19 @@ app = FastAPI(
   title="PilotCity Ideate Assistant API",
   description="An API for getting help with the Ideate activity."
 )
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["*"], 
+  allow_credentials=True,
+  allow_methods=["*"], 
+  allow_headers=["*"],
+)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+async def read_index():
+    # This serves the index.html file when someone visits the root URL
+    return FileResponse('static/index.html')
 
 @app.post("/ideate_assistant")
 def get_ideate_assistance(payload: QueryPayload) -> dict:
@@ -32,7 +48,7 @@ def get_ideate_assistance(payload: QueryPayload) -> dict:
   # ideate_crew = IdeateCrew()
   # result = ideate_crew.kickoff(inputs=inputs)
   
-  result = f"Crew AI would now process your query: '{payload.user_query}'"
+  result = f"Crew AI would now process your query: '{payload}'"
   return {"response": result}
 
 @app.get("/")
